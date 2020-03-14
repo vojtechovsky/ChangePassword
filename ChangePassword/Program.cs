@@ -15,10 +15,13 @@ namespace ChangePassword
         [STAThread]
         static void Main()
         {
+            SetExceptionHandler();
+
+            //add THINFINITY VIRTUALUI
+            new Cybele.Thinfinity.VirtualUI().Start();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            SetExceptionHandler();
             Application.Run(new FormChangePasswordDialog());
         }
 
