@@ -23,17 +23,24 @@ namespace ChangePassword
                 FlexibleMessageBox.Show("The Passwords you entered did not match.", "Error", MessageBoxButtons.OK);
                 return;
             }
-
-
-            using (var context = new PrincipalContext( ContextType.Domain ))
+            
+            using (var context = new PrincipalContext(ContextType.Machine))
             {
-                using (var user = UserPrincipal.FindByIdentity( context, IdentityType.SamAccountName, txtUsername.Text ))
+                var isCorrect = context.ValidateCredentials(txtUsername.Text, txtOldPassword.Text);
+
+                if (!isCorrect)
+                {
+                    FlexibleMessageBox.Show("Your old password is NOT correct!");
+                    return;
+                }
+
+                using (var user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, txtUsername.Text))
                 {
                     if (user != null)
                     {
-                        user.ChangePassword( txtOldPassword.Text, txtNewPassword.Text );
+                        user.ChangePassword(txtOldPassword.Text, txtNewPassword.Text);
                         user.Save();
-                        FlexibleMessageBox.Show("Your password has been changed");
+                        FlexibleMessageBox.Show("Your password has been changed", "Success");
                     }
                 }
             } 
