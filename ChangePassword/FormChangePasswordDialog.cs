@@ -38,8 +38,13 @@ namespace ChangePassword
                 {
                     if (user != null)
                     {
+                        if (user.UserCannotChangePassword)
+                        {
+                            FlexibleMessageBox.Show("User cannot change password", "Error");
+                            return;
+                        }
+                        
                         user.ChangePassword(txtOldPassword.Text, txtNewPassword.Text);
-                        user.Save();
                         FlexibleMessageBox.Show("Your password has been changed", "Success");
                     }
                 }
